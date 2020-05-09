@@ -33,13 +33,16 @@ def knock_to_base(query):
 
 
 def handle(msg):
+
     """ Process request like '3+2' """
     content_type, chat_type, chat_id = telepot.glance(msg)
     print(msg)
     text = msg["text"]
     text=text.lower()
+    user_id = msg["from"]["username"]
     if(msg["text"] == '/help'):
-        answer = 'Для регистрации, введите ваш табельный номер в формате: /reg [Табельный номер]'
+        answer = 'Для регистрации, введите ваш логин в формате: /reg [логин]/n' \
+                 'Чтобы узнать свои предстоящие события, введите команду /events'
         TelegramBot.sendMessage(chat_id, answer)
         return
 
@@ -53,7 +56,7 @@ def handle(msg):
             if(cursor.rowcount>0):
                 try:
 
-                    user_id=msg["from"]["username"]
+
                     knock_to_base(f"INSERT INTO `hted_bot`.`tlg_users` (`tlg_login`,`user_login`) VALUES ('{user_id}','{login}');")
                     TelegramBot.sendMessage(chat_id, f'Пользователь {login} добавлен c id {user_id}')
                 except Exception as ex:
@@ -66,10 +69,30 @@ def handle(msg):
         except Exception as ex:
             TelegramBot.sendMessage(chat_id, 'Произошла ошибка, повторите запрос')
             print(ex)
+            return
+
+    cursor = knock_to_base(f"CALL `hted_bot`.`fing_if_tlg_id_exists`('{user_id}')")
+
+    if (cursor is None or cursor.rowcount == 0):
+        TelegramBot.sendMessage(chat_id, 'Простите, я вас не узнаю. Необходимо пройти процедуру регистрации\n' +
+                                'Для регистрации, введите ваш логин номер в формате: /reg [логин])')
+        print(f'unknown_user: {user_id}')
         return
 
-    answer = 'Здраститяъ'
-    TelegramBot.sendMessage(chat_id, answer)
+    # Блок, когда распознали юзверя
+    else:
+        if(text=='/events'):
+            cursor = knock_to_base(f"CALL `hted_bot`.`get_user_events`('{user_id}');")
+            answer = 'Список ваших предстоящих событий:\n'
+            for rec in cursor._rows:
+                answer= answer + f'Событие {rec["name"]} произойдёт {rec["ev_date"]} в {rec["ev_time"]} по ссылке {rec["link"]}\n'
+
+            TelegramBot.sendMessage(chat_id,answer)
+        TelegramBot.sendMessage(chat_id, 'Задайте вопрос или введите команду. Введите /help для получения списка команд')
+        return
+
+
+
 
 
 
