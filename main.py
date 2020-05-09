@@ -1,35 +1,82 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import telepot
+from telepot.loop import MessageLoop
+import pymysql
+from pymysql.cursors import DictCursor
+
+token = '1032884247:AAFVu11PfhrlTg0JA8Xh63qs5ejk9CTwsX4'
+telepot.api.set_proxy('http://82.119.170.106:8080')
+TelegramBot = telepot.Bot(token)
+print('started')
 
 
-REQUEST_KWARGS={
-    # "USERNAME:PASSWORD@" is optional, if you need authentication:
-    'proxy_url': 'socks5://193.47.35.53:16320',
-}
+dict = {"курлык":"Курлык-курлык","Какие корабли":"НЕ СТУКАЙ"}
+
+connection = pymysql.connect(
+    host='localhost',
+    port = 3307,
+    user='root',
+    password='1234',
+    db='hted_bot',
+    charset='utf8mb4',
+    cursorclass=DictCursor
+)
+
+def knock_to_base(query):
+    with connection:
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query)
+            return cursor
+        except Exception as ex:
+            print(f'error:{ex}')
 
 
-TOKEN='1032884247:AAFVu11PfhrlTg0JA8Xh63qs5ejk9CTwsX4'
-#request_kwargs=REQUEST_KWARGS,
-updater = Updater(token=TOKEN, request_kwargs=REQUEST_KWARGS, use_context=True) # Токен API к Telegram
-dispatcher = updater.dispatcher
 
-#HANDLERS
-def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='Привет, давай пообщаемся?')
-def textMessage(bot, update):
-    response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text=response)
+def handle(msg):
+    """ Process request like '3+2' """
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    print(msg)
+    text = msg["text"]
+    text=text.lower()
+    if(msg["text"] == '/help'):
+        answer = 'Для регистрации, введите ваш табельный номер в формате: /reg [Табельный номер]'
+        TelegramBot.sendMessage(chat_id, answer)
+        return
 
-# commands
-start_command_handler = CommandHandler('start', startCommand)
-text_message_handler = MessageHandler(Filters.text, textMessage)
+    if('/reg' in msg["text"]):
+        try:
+            text = msg["text"]
+            words = text.split(" ")
+            login=words[1]
+
+            cursor = knock_to_base(f"CALL `hted_bot`.`fing_if_user_exists`('{login}')")
+            if(cursor.rowcount>0):
+                try:
+
+                    user_id=msg["from"]["username"]
+                    knock_to_base(f"INSERT INTO `hted_bot`.`tlg_users` (`tlg_login`,`user_login`) VALUES ('{user_id}','{login}');")
+                    TelegramBot.sendMessage(chat_id, f'Пользователь {login} добавлен c id {user_id}')
+                except Exception as ex:
+                    print(ex)
+                    TelegramBot.sendMessage(chat_id, 'Произошла ошибка при регистрации, повторите запрос')
+
+            else:
+                TelegramBot.sendMessage(chat_id, 'Табельный номер не зарегистрирован')
+
+        except Exception as ex:
+            TelegramBot.sendMessage(chat_id, 'Произошла ошибка, повторите запрос')
+            print(ex)
+        return
+
+    answer = 'Здраститяъ'
+    TelegramBot.sendMessage(chat_id, answer)
 
 
-# adding commands
-dispatcher.add_handler(start_command_handler)
-dispatcher.add_handler(text_message_handler)
 
-#updater starting
-updater.start_polling(clean=True)
+MessageLoop(TelegramBot, handle).run_as_thread()
 
-#stop_bot
-updater.idle()
+# Keep the program running.
+while True:
+    n = input('Здраститя\n')
+    if n.strip() == 'stop':
+        break
