@@ -1,0 +1,14 @@
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\bin\Release\HackBotDBEditor.exe.config
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\bin\Release\HackBotDBEditor.exe
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\bin\Release\HackBotDBEditor.pdb
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\bin\Release\MySql.Data.dll
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.csprojAssemblyReference.cache
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.addGroupForm.resources
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.createUserForm.resources
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.mainForm.resources
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.Properties.Resources.resources
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.csproj.GenerateResource.cache
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.csproj.CoreCompileInputs.cache
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.csproj.CopyComplete
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.exe
+D:\!pydev\hackbot\VisualDBEditor\HackBotDBEditor\HackBotDBEditor\obj\Release\HackBotDBEditor.pdb
