@@ -39,6 +39,8 @@ def handle(msg):
     text = msg["text"]
     text=text.lower()
     user_id = msg["from"]["username"]
+
+    knock_to_base(f"CALL `hted_bot`.`write_to_log`('{user_id}', '{text}', {msg['date']});")
     if(msg["text"] == '/help'):
         answer = 'Для регистрации, введите ваш логин в формате: /reg [логин]\n ' \
                  'Чтобы узнать свои предстоящие события, введите команду /events\n' \
