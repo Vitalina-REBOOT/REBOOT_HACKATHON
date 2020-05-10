@@ -10,21 +10,6 @@ telepot.api.set_proxy('http://82.119.170.106:8080')
 TelegramBot = telepot.Bot(token)
 print('started')
 
-def dialog_flow_connector(text):
-    request = apiai.ApiAI('ВАШ API ТОКЕН').text_request()  # Токен API к Dialogflow
-    request.lang = 'ru'  # На каком языке будет послан запрос
-    request.session_id = 'BatlabAIBot'  # ID Сессии диалога (нужно, чтобы потом учить бота)
-    request.query = text  # Посылаем запрос к ИИ с сообщением от юзера
-    responseJson = json.loads(request.getresponse().read().decode('utf-8'))
-    response = responseJson['result']['fulfillment']['speech']  # Разбираем JSON и вытаскиваем ответ
-    # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
-    if response:
-        print(response)
-        #bot.send_message(chat_id=update.message.chat_id, text=response)
-    else:
-       print("Я не понял")
-
-
 connection = pymysql.connect(
     host='localhost',
     port = 3307,
